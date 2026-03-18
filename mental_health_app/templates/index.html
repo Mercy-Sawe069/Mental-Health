@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindGuard — Mental Health Risk Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <span class="brand-icon">🧠</span>
+            <span class="brand-name">MindGuard</span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-section="dashboard">
+                <span class="nav-icon">📊</span> Dashboard
+            </a>
+            <a href="#" class="nav-item" data-section="assessment">
+                <span class="nav-icon">📋</span> Assessment
+            </a>
+            <a href="#" class="nav-item" data-section="about">
+                <span class="nav-icon">ℹ️</span> About
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <p>Predictive Mental Health System</p>
+            <p class="version">v1.0.0</p>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <h1 class="page-title" id="page-title">Dashboard Overview</h1>
+            </div>
+            <div class="topbar-right">
+                <span class="badge badge-secure">🔒 Secure</span>
+                <span class="badge badge-ai">AI Powered</span>
+            </div>
+        </header>
+
+        <!-- DASHBOARD SECTION -->
+        <section id="section-dashboard" class="section active">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon stat-blue">📝</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Total Assessments</span>
+                        <span class="stat-value" id="stat-total">0</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon stat-red">⚠️</div>
+                    <div class="stat-info">
+                        <span class="stat-label">At-Risk Cases</span>
+                        <span class="stat-value" id="stat-at-risk">0</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon stat-green">✅</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Low Risk Cases</span>
+                        <span class="stat-value" id="stat-low-risk">0</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon stat-orange">📈</div>
+                    <div class="stat-info">
+                        <span class="stat-label">At-Risk Rate</span>
+                        <span class="stat-value" id="stat-rate">0%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3 class="chart-title">Risk Distribution</h3>
+                    <div class="chart-container">
+                        <canvas id="riskDonutChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3 class="chart-title">Indicator Frequency</h3>
+                    <div class="chart-container">
+                        <canvas id="indicatorBarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <div class="cta-card">
+                <div class="cta-text">
+                    <h3>Run a New Assessment</h3>
+                    <p>Use our AI model to classify an individual's mental health risk in seconds.</p>
+                </div>
+                <button class="btn btn-primary" onclick="switchSection('assessment')">Start Assessment →</button>
+            </div>
+        </section>
+
+        <!-- ASSESSMENT SECTION -->
+        <section id="section-assessment" class="section">
+            <div class="assessment-layout">
+                <!-- Form Panel -->
+                <div class="form-panel" id="form-panel">
+                    <h2 class="panel-title">Risk Assessment Form</h2>
+                    <p class="panel-subtitle">Answer all questions to generate a risk classification.</p>
+
+                    <form id="prediction-form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="occupation">Occupation</label>
+                                <select id="occupation" name="occupation" required>
+                                    <option value="">Select occupation</option>
+                                    <option value="Corporate">Corporate</option>
+                                    <option value="Student">Student</option>
+                                    <option value="Business">Business</option>
+                                    <option value="Housewife">Housewife</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="family_history">Family History of Mental Health Issues</label>
+                                <select id="family_history" name="family_history" required>
+                                    <option value="">Select option</option>
+                                    <option value="No">No</option>
+                                    <option value="Yes">Yes</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="care_options">Access to Care Options</label>
+                                <select id="care_options" name="care_options" required>
+                                    <option value="">Select option</option>
+                                    <option value="No">No</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="Not sure">Not sure</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="mental_health_history">Previous Mental Health Diagnosis</label>
+                                <select id="mental_health_history" name="mental_health_history" required>
+                                    <option value="">Select option</option>
+                                    <option value="No">No</option>
+                                    <option value="Yes">Yes</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="mood_swings">Frequency of Mood Swings</label>
+                                <select id="mood_swings" name="mood_swings" required>
+                                    <option value="">Select frequency</option>
+                                    <option value="Low">Low</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="High">High</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="days_indoors">Days Spent Indoors</label>
+                                <select id="days_indoors" name="days_indoors" required>
+                                    <option value="">Select range</option>
+                                    <option value="Go out Every day">Go out Every day</option>
+                                    <option value="1-14 days">1–14 days</option>
+                                    <option value="15-30 days">15–30 days</option>
+                                    <option value="31-60 days">31–60 days</option>
+                                    <option value="More than 2 months">More than 2 months</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="work_interest">Interest in Work / Daily Activities</label>
+                                <select id="work_interest" name="work_interest" required>
+                                    <option value="">Select option</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="Maybe">Maybe</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="changes_habits">Recent Changes in Daily Habits</label>
+                                <select id="changes_habits" name="changes_habits" required>
+                                    <option value="">Select option</option>
+                                    <option value="No">No</option>
+                                    <option value="Maybe">Maybe</option>
+                                    <option value="Yes">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary" id="submit-btn">
+                                <span id="btn-text">Analyse Risk</span>
+                                <span id="btn-loader" class="loader hidden"></span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Result Panel -->
+                <div class="result-panel hidden" id="result-panel">
+                    <h2 class="panel-title">Assessment Result</h2>
+
+                    <!-- Gauge -->
+                    <div class="gauge-wrapper">
+                        <canvas id="gaugeChart" width="260" height="150"></canvas>
+                        <div class="gauge-label">
+                            <span id="gauge-score" class="gauge-score">0</span>
+                            <span class="gauge-unit">/ 100 Risk Score</span>
+                        </div>
+                    </div>
+
+                    <!-- Risk Badge -->
+                    <div class="risk-badge-wrapper">
+                        <span id="risk-badge" class="risk-badge">—</span>
+                    </div>
+
+                    <!-- Summary -->
+                    <div class="result-summary">
+                        <p id="result-summary-text"></p>
+                        <p id="result-recommendation-text" class="recommendation"></p>
+                    </div>
+
+                    <!-- Active Factors -->
+                    <div class="factors-section">
+                        <h4>Detected Risk Factors</h4>
+                        <div id="factors-list" class="factors-list"></div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn btn-secondary" id="new-assessment-btn">← New Assessment</button>
+                        <button class="btn btn-primary" onclick="switchSection('dashboard')">View Dashboard</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT SECTION -->
+        <section id="section-about" class="section">
+            <div class="about-card">
+                <h2>About MindGuard</h2>
+                <p>MindGuard is a predictive mental health risk classification system powered by machine learning. It analyses key behavioural and demographic indicators to estimate an individual's risk of experiencing mental health challenges.</p>
+
+                <h3>How It Works</h3>
+                <div class="how-it-works">
+                    <div class="step"><span class="step-num">1</span><p>User completes an 8-question behavioural assessment.</p></div>
+                    <div class="step"><span class="step-num">2</span><p>The AI model evaluates risk indicators across all responses.</p></div>
+                    <div class="step"><span class="step-num">3</span><p>A risk score and classification (Low / Moderate / High) is generated.</p></div>
+                    <div class="step"><span class="step-num">4</span><p>Personalised recommendations are provided based on the result.</p></div>
+                </div>
+
+                <h3>Risk Factors Evaluated</h3>
+                <div class="factors-grid">
+                    <span class="factor-tag">Family History</span>
+                    <span class="factor-tag">Mental Health History</span>
+                    <span class="factor-tag">Habit Changes</span>
+                    <span class="factor-tag">Mood Swings</span>
+                    <span class="factor-tag">Days Indoors</span>
+                    <span class="factor-tag">Work Disinterest</span>
+                    <span class="factor-tag">Care Access</span>
+                    <span class="factor-tag">Occupation</span>
+                </div>
+
+                <div class="disclaimer">
+                    <strong>⚠️ Disclaimer:</strong> This tool is for informational purposes only and does not constitute medical advice. Always consult a qualified mental health professional for diagnosis and treatment.
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
